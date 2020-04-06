@@ -1,9 +1,13 @@
+#include <iostream>
+
 #include "queue.h"
 
 #include <utility>
 
+#include "exception.h"
+
 void Rehandling(Stack& Left, Stack& Right) {
-	while(!Left.Empty()) {
+	while(Left.Size()) {
 		Right.Push(Left.Top());
 		Left.Pop();
 	}
@@ -14,26 +18,52 @@ void Queue::Push(Type value) {
 }
 
 void Queue::Pop() {
-	if (Right.Empty()) {
-		Rehandling(Left, Right);
+	try {
+		if (Size() == 0) {
+			throw logic_error();
+		}
+		if (Right.Empty()) {
+			Rehandling(Left, Right);
+		}
+		Right.Pop();
+	} catch (exception& ex) {
+		std::cout << "size = 0, нельзя Pop()\n";
+		throw;
 	}
-	Right.Pop();
 }
 
 Type& Queue::Front() {
-	if (Right.Empty()) {
-		Rehandling(Left, Right);
+	try {
+		if (Size() == 0) {
+			throw logic_error();
+		}
+		if (Right.Empty()) {
+			Rehandling(Left, Right);
+		}
+		return Right.Top();
+	} catch (exception& ex) {
+		std::cout << "size = 0, нельзя Top()\n";
+		throw;
 	}
-	return Right.Top();
 }
 
 Type Queue::Front() const {
-	if (Right.Empty()) {
-		Stack copied_to;
-		Copy(Left, copied_to);
-		return copied_to.Top();		
-	}	
-	return Right.Top();
+	try {
+		if (Size() == 0) {
+			throw logic_error();
+		}
+		if (Right.Empty()) {
+			Node* ptr = Left.head_;
+			while (ptr -> prev) {
+				ptr = ptr -> prev;
+			}
+			return ptr -> value_;
+		}	
+		return Right.Top();
+	} catch (exception& ex) {
+		std::cout << "size = 0, нельзя Front()\n";
+		throw;
+	}
 }
 
 void Queue::Clear() {
@@ -41,8 +71,8 @@ void Queue::Clear() {
 	Right.Clear();
 }
 bool Queue::Empty() const {
-	return (Left.Size() + Right.Size()) == 0;
+	return Left.size_ + Right.size_== 0;
 }
 size_t Queue::Size() const {
-	return Left.Size() + Right.Size();
+	return Left.size_ + Right.size_;
 }

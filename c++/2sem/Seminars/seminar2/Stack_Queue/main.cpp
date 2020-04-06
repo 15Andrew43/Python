@@ -2,6 +2,8 @@
 
 #include "queue.h"
 
+#include "exception.h"
+
 int main() {
 	Stack stack;
 	stack.Push(1543);
@@ -22,9 +24,7 @@ int main() {
 	s1.Push(3);
 	s1.Push(12);
 	Stack s2;
-	std::cout << "hello\n";
 	s2 = s1;
-
 	std::cout << s2.Size() << '\n';
 	std::cout << s2.Top() << '\n';
 	s2.Pop();
@@ -32,7 +32,7 @@ int main() {
 	s2.Top() = 1534;
 	std::cout << s2.Top() << '\n';
 
-	std::cout << "============================================================\n";
+	std::cout << "=====================================================\n";
 
 	Queue q;
 	q.Push(1);
