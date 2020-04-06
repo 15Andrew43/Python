@@ -4,6 +4,7 @@
 
 #include "date.h"
 #include "lib.h"
+#include "exception.h"
 
 bool Date::IsLeapYear() const {
 	if ((year_%4 == 0 && year_%100 != 0) || (year_%400 == 0)){
@@ -19,6 +20,8 @@ void Date::SetDay(int day) {
 	capacity[1] = ((IsLeapYear()) ? 29 : 28);
 	if (day > 0 && day <= 31 && day <= capacity[month_-1]) {
 		day_ = day;
+	} else {
+		throw domain_error();
 	}
 }
 
@@ -27,25 +30,40 @@ void Date::SetMonth(int month) {
 	capacity[1] = (IsLeapYear()?29:28);
 	if (month > 0 && month <= 12 && day_ < capacity[month-1]) {
 		month_ = month;
+	} else {
+		throw domain_error();
 	}
 }
 
 
 void Date::SetYear(int year) {
-	year_ = year;
 	if (!(IsLeapYear()) && day_ == 29 && month_ == 2) { 
-		day_ = 1;
-		month_ = 1;
+//		day_ = 1;
+//		month_ = 1;
+		throw domain_error();
 	}
+	year_ = year;
 }
 
 int Date::GetDay() const {
+	if (day_ == 0) {
+		std::cout << "дата еще не определена\n";
+		throw logic_error();
+	}
 	return day_;
 }
 int Date::GetMonth() const {
+	if (month_ == 0) {
+		std::cout << "дата еще не определена\n";
+		throw logic_error();
+	}
 	return month_;
 }
 int Date::GetYear() const {
+	if (year_ == 0) {
+		std::cout << "дата еще не определена\n";
+		throw logic_error();
+	}
 	return year_;
 }
 
@@ -60,11 +78,15 @@ Date ReadDate(Date& date) {
 	int date_array[3]; 
 
 	bool flag = ParseString(date_array, date_str, '/');  
-
-	if (flag) { 
-		date.SetDay(date_array[0]);
-		date.SetMonth(date_array[1]);
-		date.SetYear(date_array[2]);
+	try {
+		if (flag) { 
+			date.SetDay(date_array[0]);
+			date.SetMonth(date_array[1]);
+			date.SetYear(date_array[2]);
+		} 	
+	} catch (exception& ex) {
+		std::cout << "wrong input of date\n";
+		throw;
 	}
 
 	return date;

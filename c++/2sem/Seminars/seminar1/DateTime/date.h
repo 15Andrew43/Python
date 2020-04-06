@@ -3,9 +3,9 @@
 
 
 class Date {
-	int day_ = 1;
-	int month_ = 1;
-	int year_ = 1;
+	int day_ = 0;
+	int month_ = 0;
+	int year_ = 0;
 
 	bool IsLeapYear() const;
 
