@@ -1,4 +1,4 @@
-# Install script for directory: /Users/VasilyBorovets/Desktop/Proga2019-2020/c++/2sem/contest/Rational
+# Install script for directory: /Users/VasilyBorovets/Desktop/CLine/Matrix
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/Users/VasilyBorovets/Desktop/Proga2019-2020/c++/2sem/contest/Rational/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/Users/VasilyBorovets/Desktop/CLine/Matrix/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

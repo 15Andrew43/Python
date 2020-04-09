@@ -6,7 +6,9 @@
 
 #IncludeRegexTransform: 
 
-/Users/VasilyBorovets/Desktop/CLine/Rational/main.cpp
+/Users/VasilyBorovets/Desktop/CLine/Matrix/main.cpp
+iostream
+-
 iostream
 -
 cstdlib

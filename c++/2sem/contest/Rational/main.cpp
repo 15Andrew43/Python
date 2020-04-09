@@ -1,12 +1,11 @@
 #include <iostream>
 #include <cstdlib>
 #include <cstring>
-using namespace std;
 
 class RationalDivisionByZero {
 };
 
-int64_t NOD(int64_t p, int64_t q);
+int64_t GCD(int64_t p, int64_t q);
 
 class Rational {
 private:
@@ -18,10 +17,10 @@ private:
         int64_t sign = ( (p_ * q_ < 0) ? -1 : 1);
         p_ = abs(p_);
         q_ = abs(q_);
-        int64_t nod = NOD(p_, q_);
-        p_ /= nod;
+        int64_t gcd = GCD(p_, q_);
+        p_ /= gcd;
         p_ *= sign;
-        q_ /= nod;
+        q_ /= gcd;
     }
 
 public:
@@ -34,30 +33,30 @@ public:
         q_ = q;
         reduce();
     }
-    explicit Rational(const string r) {
-        char ChNumerator[6];
-        char ChDenominator[6];
-        ChNumerator[0] = ChDenominator[0] = '\0';
-        int64_t L = r.size();
-        int64_t flag = 1;
-        int64_t j = 0;
-        int64_t i;
-        for (i = 0; i < L; ++i) {
-            if (r[i] == '/') {
-                ChNumerator[i] = '\0';
-                flag = 2;
+    explicit Rational(const std::string& r) {
+        char CharNumerator[6];
+        char CharDenominator[6];
+        CharNumerator[0] = CharDenominator[0] = '\0';
+        int64_t Length = r.size();
+        bool numerator = true;
+        int64_t denominator_ind = 0;
+        int64_t numerator_ind;
+        for (numerator_ind = 0; numerator_ind < Length; ++numerator_ind) {
+            if (r[numerator_ind] == '/') {
+                CharNumerator[numerator_ind] = '\0';
+                numerator = false;
                 continue;
             }
-            ((flag == 1) ? ChNumerator[i] : ChDenominator[j++]) = r[i];
+            ((numerator) ? CharNumerator[numerator_ind] : CharDenominator[denominator_ind++]) = r[numerator_ind]; //          сделал буль флэг
         }
-        if (strlen(ChDenominator) == 0) {
-            ChNumerator[i] = '\0';
+        if (strlen(CharDenominator) == 0) {
+            CharNumerator[numerator_ind] = '\0';
         }
-        ChDenominator[j] = '\0';
+        CharDenominator[denominator_ind] = '\0';
 
-        p_ = atoi(ChNumerator);
-        if (strlen(ChDenominator) != 0) {
-            q_ = atoi(ChDenominator);
+        p_ = atoi(CharNumerator);
+        if (strlen(CharDenominator) != 0) {
+            q_ = atoi(CharDenominator);
         }
         reduce();
     }
@@ -70,11 +69,11 @@ public:
         return q_;
     }
 
-    void Print64_tRational() const {
-        cout << p_;
+  /*  void Print64_tRational() const {
+        std::cout << p_;
         if (q_ != 1)
-            cout << '/' << q_;
-    }
+            std::cout << '/' << q_;
+  }*/
 
 
 };
@@ -82,113 +81,105 @@ bool operator==(Rational lhs, Rational rhs) {
     return (lhs.getNumerator() == rhs.getNumerator() && lhs.getDenominator() == rhs.getDenominator());
 }
 bool operator!=(Rational lhs, Rational rhs) {
-    return (!(lhs == rhs));
+    return !(lhs == rhs);
 }
 bool operator<(Rational lhs, Rational rhs) {
-    return (lhs.getNumerator() * rhs.getDenominator() < rhs.getNumerator() * lhs.getDenominator());
+    return lhs.getNumerator() * rhs.getDenominator() < rhs.getNumerator() * lhs.getDenominator();
 }
 bool operator>=(Rational lhs, Rational rhs) {
-    return (!(lhs < rhs));
+    return !(lhs < rhs);
 }
 bool operator>(Rational lhs, Rational rhs) {
-    return (lhs.getNumerator() * rhs.getDenominator() > rhs.getNumerator() * lhs.getDenominator());
+    return lhs.getNumerator() * rhs.getDenominator() > rhs.getNumerator() * lhs.getDenominator();
 }
 bool operator<=(Rational lhs, Rational rhs) {
-    return (!(lhs > rhs));
+    return !(lhs > rhs);
 }
 
-Rational operator+(Rational lhs, Rational rhs) {
-    int64_t p = 1;
-    int64_t q = 1;
-    p = lhs.getNumerator() * rhs.getDenominator() + rhs.getNumerator() * lhs.getDenominator();
-    q = lhs.getDenominator() * rhs.getDenominator();
-    return Rational(p, q);
+Rational operator+(const Rational& lhs, const Rational& rhs) {
+    int64_t p = lhs.getNumerator() * rhs.getDenominator() + rhs.getNumerator() * lhs.getDenominator();
+    int64_t q = lhs.getDenominator() * rhs.getDenominator();
+    return {p, q};
 }
-Rational operator-(Rational lhs, Rational rhs) {
-    int64_t p = 1;
-    int64_t q = 1;
-    p = lhs.getNumerator() * rhs.getDenominator() - rhs.getNumerator() * lhs.getDenominator();
-    q = lhs.getDenominator() * rhs.getDenominator();
-    return Rational(p, q);
+Rational operator-(const Rational& lhs, const Rational& rhs) {
+    int64_t p = lhs.getNumerator() * rhs.getDenominator() - rhs.getNumerator() * lhs.getDenominator();
+    int64_t q = lhs.getDenominator() * rhs.getDenominator();
+    return {p, q};
 }
 
-Rational operator*(Rational lhs, Rational rhs) {
-    int64_t p = 1;
-    int64_t q = 1;
-    p = lhs.getNumerator() * rhs.getNumerator();
-    q = lhs.getDenominator() * rhs.getDenominator();
-    return Rational(p, q);
+Rational operator*(const Rational& lhs, const Rational& rhs) {
+    int64_t p = lhs.getNumerator() * rhs.getNumerator();
+    int64_t q = lhs.getDenominator() * rhs.getDenominator();
+    return {p, q};
 }
-Rational operator/(Rational lhs, Rational rhs) {
-    int64_t p = 1;
-    int64_t q = 1;
+Rational operator/(const Rational& lhs, const Rational& rhs) {
+    int64_t p = lhs.getNumerator() * rhs.getDenominator();
+    int64_t q = lhs.getDenominator() * rhs.getNumerator();
     if (rhs == 0) {
         throw RationalDivisionByZero();
     }
-    p = lhs.getNumerator() * rhs.getDenominator();
-    q = lhs.getDenominator() * rhs.getNumerator();
-    return Rational(p, q);
+    return {p, q};
 }
 
 
-Rational operator+(Rational lhs) {
+Rational operator+(const Rational& lhs) {
     return lhs;
 }
-Rational operator-(Rational lhs) {
+Rational operator-(const Rational& lhs) {
     return (-1) * lhs;
 }
 
-Rational& operator+=(Rational& lhs, Rational rhs) {
+Rational& operator+=(Rational& lhs, const Rational& rhs) {
     lhs = lhs + rhs;
     return lhs;
 }
-Rational& operator-=(Rational& lhs, Rational rhs) {
+Rational& operator-=(Rational& lhs, const Rational& rhs) {
     lhs = lhs - rhs;
     return lhs;
 
 }
-Rational& operator*=(Rational& lhs, Rational rhs) {
+Rational& operator*=(Rational& lhs, const Rational& rhs) {
     lhs = lhs * rhs;
     return lhs;
 }
-Rational& operator/=(Rational& lhs, Rational rhs) {
+Rational& operator/=(Rational& lhs, const Rational& rhs) {
     lhs = lhs / rhs;
     return lhs;
-}
-
-Rational operator++(Rational& lhs, int) {
-    lhs += 1;
-    return lhs - 1;
 }
 Rational& operator++(Rational& lhs) {
     lhs += 1;
     return lhs;
 }
-Rational operator--(Rational& lhs, int) {
-    lhs -= 1;
-    return lhs + 1;
+Rational operator++(Rational& lhs, int) {
+    return ++lhs - 1;
 }
 Rational& operator--(Rational& lhs) {
     lhs -= 1;
     return lhs;
 }
+Rational operator--(Rational& lhs, int) {
+    return --lhs + 1;
+}
 
-istream& operator>>(istream& is, Rational& r) {
-    string r_str;
+
+std::istream& operator>>(std::istream& is, Rational& r) {
+    std::string r_str;
     is >> r_str;
     r = Rational(r_str);
     return is;
 }
-ostream& operator<<(ostream& os, Rational r) {
-    r.Print64_tRational();
+std::ostream& operator<<(std::ostream& os, Rational r) {
+    std::cout << r.getNumerator();
+    if (r.getDenominator() != 1)
+        std::cout << '/' << r.getDenominator();
     return os;
 }
 
 
-int64_t NOD(int64_t p, int64_t q) {
+int64_t GCD(int64_t p, int64_t q) {
     while (q != 0) {
         p %= q;
-        swap(p, q);
+        std::swap(p, q);
     }
     return p;
 }
@@ -197,72 +188,72 @@ int main() {
 //    cout << Rational (-1111, 9);
 
     int64_t a;
-    cin >> a;
+    std::cin >> a;
 
     int64_t p, q;
-    cin >> p >> q;
+    std::cin >> p >> q;
     const Rational rc(p, q); // q != 0 is guaranteed by author of tests
-    cout << rc.getNumerator() << ' ' << rc.getDenominator() << endl;
+    std::cout << rc.getNumerator() << ' ' << rc.getDenominator() << std::endl;
 
     Rational r1, r2;
-    cin >> r1 >> r2;
+    std::cin >> r1 >> r2;
 
-    cout << r1 << endl;
-    cout << r2 << endl;
+    std::cout << r1 << std::endl;
+    std::cout << r2 << std::endl;
 
     try {
-        cout << 1/r1 << endl;
+        std::cout << 1/r1 << std::endl;
     } catch (const RationalDivisionByZero& ex) {
-        cout << "Cannot get reciprocal of r1." << endl;
+        std::cout << "Cannot get reciprocal of r1." << std::endl;
     }
 
     try {
-        cout << rc/r2 << endl;
+        std::cout << rc/r2 << std::endl;
     } catch (const RationalDivisionByZero& ex) {
-        cout << "Cannot divide by r2." << endl;
+        std::cout << "Cannot divide by r2." << std::endl;
     }
 
-    cout << (r1 < r2) << endl;
-    cout << (r1 <= r2) << endl;
-    cout << (r1 > r2) << endl;
-    cout << (r1 >= r2) << endl;
-    cout << (r1 == r2) << endl;
-    cout << (r1 != r2) << endl;
+    std::cout << (r1 < r2) << std::endl;
+    std::cout << (r1 <= r2) << std::endl;
+    std::cout << (r1 > r2) << std::endl;
+    std::cout << (r1 >= r2) << std::endl;
+    std::cout << (r1 == r2) << std::endl;
+    std::cout << (r1 != r2) << std::endl;
 
-    cout << (r1 < a) << endl;
-    cout << (r1 <= a) << endl;
-    cout << (r1 > a) << endl;
-    cout << (r1 >= a) << endl;
-    cout << (r1 == a) << endl;
-    cout << (r1 != a) << endl;
+    std::cout << (r1 < a) << std::endl;
+    std::cout << (r1 <= a) << std::endl;
+    std::cout << (r1 > a) << std::endl;
+    std::cout << (r1 >= a) << std::endl;
+    std::cout << (r1 == a) << std::endl;
+    std::cout << (r1 != a) << std::endl;
 
-    cout << (a < r2) << endl;
-    cout << (a <= r2) << endl;
-    cout << (a > r2) << endl;
-    cout << (a >= r2) << endl;
-    cout << (a == r2) << endl;
-    cout << (a != r2) << endl;
+    std::cout << (a < r2) << std::endl;
+    std::cout << (a <= r2) << std::endl;
+    std::cout << (a > r2) << std::endl;
+    std::cout << (a >= r2) << std::endl;
+    std::cout << (a == r2) << std::endl;
+    std::cout << (a != r2) << std::endl;
 
-    cout << rc + a << endl
-         << a + rc << endl
-         << -rc * r1 << endl
-         << (+r1 - r2 * rc) * a << endl;
+    std::cout << rc + a << std::endl
+         << a + rc << std::endl
+         << -rc * r1 << std::endl
+         << (+r1 - r2 * rc) * a << std::endl;
 
-    cout << ++r1 << endl;
-    cout << r1 << endl;
-    cout << r1++ << endl;
-    cout << r1 << endl;
-    cout << --r1 << endl;
-    cout << r1 << endl;
-    cout << r1-- << endl;
-    cout << r1 << endl;
-    cout << ++(++r1) << endl;
-    cout << r1 << endl;
+    std::cout << ++r1 << std::endl;
+    std::cout << r1 << std::endl;
+    std::cout << r1++ << std::endl;
+    std::cout << r1 << std::endl;
+    std::cout << --r1 << std::endl;
+    std::cout << r1 << std::endl;
+    std::cout << r1-- << std::endl;
+    std::cout << r1 << std::endl;
+    std::cout << ++(++r1) << std::endl;
+    std::cout << r1 << std::endl;
 
-    cout << ((((r1 += r2) /= Rational(-5,3)) -= rc) *= a) << endl;
-    cout << (r1 += r2 /= 3) << endl;
-    cout << r1 << endl;
-    cout << r2 << endl;
+    std::cout << ((((r1 += r2) /= Rational(-5,3)) -= rc) *= a) << std::endl;
+    std::cout << (r1 += r2 /= 3) << std::endl;
+    std::cout << r1 << std::endl;
+    std::cout << r2 << std::endl;
     return 0;
 
 }
