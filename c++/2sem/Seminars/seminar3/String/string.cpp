@@ -44,6 +44,10 @@ String::String() {
 }
 
 String::String(char symbol) {
+<<<<<<< HEAD
+=======
+	std::cout << "конструктор от символа" << '\n';
+>>>>>>> cbc11e56520a96d754b4efc2e4e7a5925a9d8a3c
 	buffer_ = new char[capacity_];
 	size_ = 1;
 	buffer_[0] = symbol;
@@ -148,6 +152,7 @@ void String::ShrinkToFit() {
 }
 
 char& String::Back() {
+<<<<<<< HEAD
 	if (Size() == 0) {
 		throw LogicError("Logic Error: you can't use Back() in string, because size = 0");		
 	}
@@ -158,6 +163,28 @@ char& String::Front() {
 			throw LogicError("Logic Error: you can't use Front() in string, because size = 0");
 		}
 		return (*this)[0];
+=======
+	try {
+		if (Size() == 0) {
+			throw out_of_range();
+		}
+		return (*this)[Size()-1];
+	} catch (exception& ex) {
+		std::cout << "method back" << '\n';
+		throw;
+	}
+}
+char& String::Front() {	
+	try {
+		if (Size() == 0) {
+			throw out_of_range();
+		}
+		return (*this)[0];
+	} catch (exception& ex) {
+		std::cout << "method front" << '\n';
+		throw;
+	}
+>>>>>>> cbc11e56520a96d754b4efc2e4e7a5925a9d8a3c
 }
 
 
@@ -165,6 +192,7 @@ char& String::Front() {
 
 
 char String::operator[](size_t idx) const {
+<<<<<<< HEAD
 	if (idx < 0 || idx >= Size()) {
 		throw OutOfRange("index out of range");
 	}
@@ -175,6 +203,28 @@ char& String::operator[](size_t idx) {
 		throw OutOfRange("index out of range");
 	}
 	return buffer_[idx];
+=======
+	try {
+		if (idx < 0 || idx >= Size()) {
+			throw out_of_range();
+		}
+		return buffer_[idx];
+	} catch (exception& ex) {
+		std::cout << "method [], out copy" << '\n';
+		throw;
+	}
+}
+char& String::operator[](size_t idx) {
+	try {
+		if (idx < 0 || idx >= Size()) {
+			throw out_of_range();
+		}
+		return buffer_[idx];
+	} catch (exception& ex) {
+		std::cout << "method [], out ref" << '\n';
+		throw;
+	}
+>>>>>>> cbc11e56520a96d754b4efc2e4e7a5925a9d8a3c
 }
 
 
@@ -226,11 +276,24 @@ void String::PushBack(char symbol) {
 	(*this) += symbol;
 }
 void String::PopBack() {
+<<<<<<< HEAD
 	if (Size() == 0) {
 		throw LogicError("Logic Error: you can't use PopBack() in string, because size = 0");		
 	}
 	(*this)[Size()-1] = '\0';
 	--size_;
+=======
+	try {
+		if (Size() == 0) {
+			throw out_of_range();
+		}
+		(*this)[Size()-1] = '\0';
+		--size_;
+	} catch (exception& ex) {
+		std::cout << "method popback" << '\n';
+		throw;
+	}
+>>>>>>> cbc11e56520a96d754b4efc2e4e7a5925a9d8a3c
 }
 
 

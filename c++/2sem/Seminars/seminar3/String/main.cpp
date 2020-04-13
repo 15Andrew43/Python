@@ -60,19 +60,38 @@ int main() {
 
 
 	std::cout << "00000000000000000000000000000000000000000000000\n";
+<<<<<<< HEAD
 */
 	String z1;
 	std::cin >> z1;
 	try {
 		std::cout << z1.Back() << '\n';
 	} catch (Exception& ex) {
+=======
+
+	String z1;
+	std::cin >> z1;
+	try {
+		std::cout << z1.Back();
+	} catch (exception& ex) {
+>>>>>>> cbc11e56520a96d754b4efc2e4e7a5925a9d8a3c
 		std::cout << ex.what() << '\n';
 	}
 	String z2 = "";
 	try {
 		z2.PopBack();
 		std::cout << z2;
+<<<<<<< HEAD
 	} catch (Exception& ex) {
+=======
+	} catch (exception& ex) {
+		std::cout << ex.what() << '\n';
+	}
+
+	try {
+		String();
+	} catch (exception& ex) {
+>>>>>>> cbc11e56520a96d754b4efc2e4e7a5925a9d8a3c
 		std::cout << ex.what() << '\n';
 	}
 }

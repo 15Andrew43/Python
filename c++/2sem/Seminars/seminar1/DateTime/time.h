@@ -3,9 +3,15 @@
 
 
 class Time {
+<<<<<<< HEAD
 	int hours_ = 0;
 	int minutes_ = 0;
 	int seconds_ = 0;
+=======
+	int hours_ = -1;
+	int minutes_ = -1;
+	int seconds_ = -1;
+>>>>>>> cbc11e56520a96d754b4efc2e4e7a5925a9d8a3c
 
 public:
 	void SetHours(int hours);

@@ -77,11 +77,37 @@ public:
     friend BigInteger operator-(const BigInteger& lhs, const BigInteger& rhs);
     friend BigInteger operator*(const BigInteger& lhs, const BigInteger& rhs);
     friend BigInteger operator/(const BigInteger& lhs, const BigInteger& rhs);
-    friend uint64_t binary_search(const BigInteger& residual, const BigInteger& rhs);
+    friend uint64_t divide_binary_search(const BigInteger& residual, const BigInteger& rhs);
 
     friend istream& operator>>(istream& is, BigInteger& N);
     friend ostream& operator<<(ostream& os, BigInteger N);
+
+    BigInteger sqrt() { // не работает почему-то
+        BigInteger l(1);
+        BigInteger r(*this);
+        while (r - l > 1) {
+         //   cout << "l = " << l << "       r = " << r << '\n';
+//            cout << (l + r) << endl;
+//            cout << ((l + r) / (BigInteger)2);
+            BigInteger m = ((l + r) / 2);
+            BigInteger comparison = m * m;
+       //     cout << "m = " << m  << "      m^2 = " << comparison << '\n';
+            if (comparison > (*this)) {
+                r = m;
+     //       cout << " r = " << r << '\n';
+            } else if (comparison < (*this)) {
+                l = m;
+   //         cout << " l = " << l << '\n';
+            } else {
+                return m;
+            }
+ //           cout << "----------------------------------------\n";
+        }
+        return l;
+    }
 };
+
+
 
 size_t ConvertToBase(digit_type* arrN, digit_type N, digit_type kBase) { //           CHECK!
     digit_type L = 0;
@@ -92,7 +118,27 @@ size_t ConvertToBase(digit_type* arrN, digit_type N, digit_type kBase) { //     
     return L;
 }
 
-uint64_t binary_search(const BigInteger& residual, const BigInteger& rhs) {
+BigInteger sqrt_binary_search(const BigInteger& BI) {
+    BigInteger l = 0;
+    BigInteger r = BI;
+    while (r - l > 1) {
+        BigInteger m = (l + r) / 2;
+        BigInteger comparison = m * m;
+//        cout << "comparison = " << comparison  << "      residual = " << residual << '\n';
+        if (comparison > BI) {
+            r = m;
+//            cout << " r = " << r << '\n';
+        } else if (comparison < BI) {
+            l = m;
+//            cout << " l = " << r << '\n';
+        } else {
+            return m;
+        }
+    }
+    return l;
+}
+
+uint64_t divide_binary_search(const BigInteger& residual, const BigInteger& rhs) {
     uint64_t l = 0, r = residual.kBase_;
     while (r - l > 1) {
         uint64_t m = (l + r) / 2;
@@ -153,6 +199,8 @@ bool operator<=(const BigInteger& lhs, const BigInteger& rhs) {
     return !(lhs > rhs);
 }
 
+
+
 BigInteger operator+(const BigInteger& lhs, const BigInteger& rhs) {
     BigInteger res;
     digit_type residual = 0;
@@ -169,6 +217,11 @@ BigInteger operator+(const BigInteger& lhs, const BigInteger& rhs) {
     }
     return res;
 }
+BigInteger& operator+=(BigInteger& lhs, const BigInteger& rhs) {
+    lhs = lhs + rhs;
+    return lhs;
+} // не по заданию
+
 BigInteger operator-(const BigInteger& lhs, const BigInteger& rhs) {
     BigInteger res = lhs;
     size_t L = lhs.Length_;
@@ -193,14 +246,11 @@ BigInteger operator-(const BigInteger& lhs, const BigInteger& rhs) {
     res.Length_ = 0;
     return res;
 }
-BigInteger& operator+=(BigInteger& lhs, const BigInteger& rhs) {
-    lhs = lhs + rhs;
-    return lhs;
-} // не по заданию
 BigInteger& operator-=(BigInteger& lhs, const BigInteger& rhs) {
     lhs = lhs - rhs;
     return lhs;
 } // не по заданию
+
 BigInteger operator*(const BigInteger& lhs, const BigInteger& rhs) {
     if (lhs.Length_ == 0 || rhs.Length_ == 0) {
         return 0;
@@ -226,6 +276,10 @@ BigInteger operator*(const BigInteger& lhs, const BigInteger& rhs) {
     }
     return res;
 }
+BigInteger& operator*=(BigInteger& lhs, const BigInteger& rhs) {
+    lhs = lhs * rhs;
+    return lhs;
+} // не по заданию
 
 BigInteger operator/(const BigInteger& lhs, const BigInteger& rhs) {
     if (lhs < rhs) {
@@ -251,16 +305,22 @@ BigInteger operator/(const BigInteger& lhs, const BigInteger& rhs) {
         residual = (residual * residual.kBase_ + lhs.digits_[--lhs_ind]);
     }//                                                                 теперь residual точно больше rhs
 
-    for (; lhs_ind >= 0; --lhs_ind) {
+    for (; lhs_ind >= 0;) {
+
         if (residual < rhs) {
-            residual = (residual * residual.kBase_ + lhs.digits_[lhs_ind]);
-        }
-        if (residual > rhs) {
+//            residual = (residual * residual.kBase_ + lhs.digits_[lhs_ind]);
+            res[res_ind++] = 0;
+        } else {
+
+    //    if (residual >= rhs) { // ????????????????????????????????????
 //            cout << residual << '\n';
-            res[res_ind] = binary_search(residual, rhs);
+
+            res[res_ind] = divide_binary_search(residual, rhs);
             residual = (residual - rhs * res[res_ind++]); // остаток
+
 //            cout << residual << '\n';
         }
+        residual = (residual * residual.kBase_ + lhs.digits_[--lhs_ind]);
     }
 //    cout << res_ind << '\n';
     BigInteger BIres;
@@ -271,8 +331,29 @@ BigInteger operator/(const BigInteger& lhs, const BigInteger& rhs) {
 
     return BIres;
 }
+BigInteger& operator/=(BigInteger& lhs, const BigInteger& rhs) {
+    lhs = lhs / rhs;
+    return lhs;
+} // не по заданию
+
 BigInteger operator%(const BigInteger& lhs, const BigInteger& rhs) {
     return lhs - rhs * (lhs/rhs);
+}
+BigInteger& operator%=(BigInteger& lhs, const BigInteger& rhs) {
+    lhs = lhs % rhs;
+    return lhs;
+} // не по заданию
+
+
+
+
+
+BigInteger NOD(BigInteger p, BigInteger q) {
+    while (q != 0) {
+        p %= q;
+        swap(p, q);
+    }
+    return p;
 }
 
 istream& operator>>(istream& is, BigInteger& N) {
@@ -310,13 +391,14 @@ int main() {
     cout <<setw(2)<< d << '\n';
     cout << 1234124134;
 */
-    BigInteger A;
-    BigInteger B;
-    cin >> A >> B;
 
-    cout << A*B << '\n';
-    cout << A/B << ' ';
-    cout << A%B;
+ //   cout << (BigInteger(201) / (BigInteger)(2)) << endl;
+    BigInteger A;
+//    BigInteger B;
+    cin >> A;
+
+    cout << A.sqrt();
+
 /*
     BigInteger a, b;
     std::cin >> a >> b;

@@ -31,14 +31,22 @@ bool ParseString(int* type_array, char* type_str, char sep='/') {
 	if (L > 10) {
 		Delete(ArrayOfStr);
 		delete[] seperate_ind;
+<<<<<<< HEAD
 		throw InvalidArgument("Invalid Argument: too much symbols in the string!");
+=======
+		throw invalid_argument();
+>>>>>>> cbc11e56520a96d754b4efc2e4e7a5925a9d8a3c
 	}
 	for (int i = 0; type_str[i]; ++i) {
 		if (type_str[i] == sep) {
 			if (++place > 2) {
 				Delete(ArrayOfStr);
 				delete[] seperate_ind;
+<<<<<<< HEAD
 				throw InvalidArgument("Invalid Argument: seperate symbols are more than 2!");
+=======
+				throw invalid_argument();
+>>>>>>> cbc11e56520a96d754b4efc2e4e7a5925a9d8a3c
 			}
 			seperate_ind[place] = i;
 		}

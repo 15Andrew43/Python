@@ -15,6 +15,7 @@ void Stack::Push(Type value) {
 }
 
 void Stack::Pop() {
+<<<<<<< HEAD
 	if (Size() == 0) {
 		throw LogicError("Logic Error: you can't use Pop() in stack, because size = 0");
 	}
@@ -36,6 +37,44 @@ Type& Stack::Top() {
 		throw LogicError("Logic Error: you can't use Top() in stack, because size = 0");
 	}
 	return head_->value_;
+=======
+	try {
+		if (Size() == 0) {
+			throw logic_error();
+		}
+		Node* old_head = head_;
+		head_ = head_->prev;
+		delete old_head;
+		--size_;
+	} catch (exception& ex) {
+		std::cout << "size = 0, нельзя pop()\n";
+		throw;
+	}
+}
+
+Type Stack::Top() const {
+	try {
+		if (Size() == 0) {
+			throw logic_error();
+		}
+		return head_->value_;
+	} catch (exception& ex) {
+		std::cout << "size = 0, нельзя Top()\n";
+		throw;
+	}
+}
+
+Type& Stack::Top() {
+	try {
+		if (Size() == 0) {
+			throw logic_error();
+		}
+		return head_->value_;
+	} catch (exception& ex) {
+		std::cout << "size = 0, нельзя Top()\n";
+		throw;
+	}
+>>>>>>> cbc11e56520a96d754b4efc2e4e7a5925a9d8a3c
 }
 
 void Stack::Clear() {

@@ -21,7 +21,11 @@ void Date::SetDay(int day) {
 	if (day > 0 && day <= 31 && day <= capacity[month_-1]) {
 		day_ = day;
 	} else {
+<<<<<<< HEAD
 		throw DomainError("Domain Error: error in the setting of the day.");
+=======
+		throw domain_error();
+>>>>>>> cbc11e56520a96d754b4efc2e4e7a5925a9d8a3c
 	}
 }
 
@@ -31,25 +35,47 @@ void Date::SetMonth(int month) {
 	if (month > 0 && month <= 12 && day_ < capacity[month-1]) {
 		month_ = month;
 	} else {
+<<<<<<< HEAD
 		throw DomainError("Domain Error: error in the setting of the month.");
+=======
+		throw domain_error();
+>>>>>>> cbc11e56520a96d754b4efc2e4e7a5925a9d8a3c
 	}
 }
 
 
 void Date::SetYear(int year) {
 	if (!(IsLeapYear()) && day_ == 29 && month_ == 2) { 
+<<<<<<< HEAD
 		throw DomainError("Domain Error: error in the setting of the year.");
+=======
+//		day_ = 1;
+//		month_ = 1;
+		throw domain_error();
+>>>>>>> cbc11e56520a96d754b4efc2e4e7a5925a9d8a3c
 	}
 	year_ = year;
 }
 
 int Date::GetDay() const {
+	if (day_ == 0) {
+		std::cout << "дата еще не определена\n";
+		throw logic_error();
+	}
 	return day_;
 }
 int Date::GetMonth() const {
+	if (month_ == 0) {
+		std::cout << "дата еще не определена\n";
+		throw logic_error();
+	}
 	return month_;
 }
 int Date::GetYear() const {
+	if (year_ == 0) {
+		std::cout << "дата еще не определена\n";
+		throw logic_error();
+	}
 	return year_;
 }
 
@@ -69,11 +95,15 @@ Date ReadDate(Date& date) {
 	int date_array[3]; 
 
 	bool flag = ParseString(date_array, date_str, '/');  
-
-	if (flag) { 
-		date.SetDay(date_array[0]);
-		date.SetMonth(date_array[1]);
-		date.SetYear(date_array[2]);
+	try {
+		if (flag) { 
+			date.SetDay(date_array[0]);
+			date.SetMonth(date_array[1]);
+			date.SetYear(date_array[2]);
+		} 	
+	} catch (exception& ex) {
+		std::cout << "wrong input of date\n";
+		throw;
 	}
 	return date;
 }

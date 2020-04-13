@@ -18,26 +18,53 @@ void Queue::Push(Type value) {
 }
 
 void Queue::Pop() {
+<<<<<<< HEAD
 	if (Size() == 0) {
 		throw LogicError("Logic Error: you can't use Pop() in queue, because size = 0");
 	}
 	if (Right.Empty()) {
 		Rehandling(Left, Right);
+=======
+	try {
+		if (Size() == 0) {
+			throw logic_error();
+		}
+		if (Right.Empty()) {
+			Rehandling(Left, Right);
+		}
+		Right.Pop();
+	} catch (exception& ex) {
+		std::cout << "size = 0, нельзя Pop()\n";
+		throw;
+>>>>>>> cbc11e56520a96d754b4efc2e4e7a5925a9d8a3c
 	}
-	Right.Pop();
 }
 
 Type& Queue::Front() {
+<<<<<<< HEAD
 	if (Size() == 0) {
 		throw LogicError("Logic Error: you can't use Front() in queue, because size = 0");
 	}
 	if (Right.Empty()) {
 		Rehandling(Left, Right);
+=======
+	try {
+		if (Size() == 0) {
+			throw logic_error();
+		}
+		if (Right.Empty()) {
+			Rehandling(Left, Right);
+		}
+		return Right.Top();
+	} catch (exception& ex) {
+		std::cout << "size = 0, нельзя Top()\n";
+		throw;
+>>>>>>> cbc11e56520a96d754b4efc2e4e7a5925a9d8a3c
 	}
-	return Right.Top();
 }
 
 Type Queue::Front() const {
+<<<<<<< HEAD
 	if (Size() == 0) {
 		throw LogicError("Logic Error: you can't use Front() in queue, because size = 0");
 	}
@@ -49,6 +76,24 @@ Type Queue::Front() const {
 		return ptr -> value_;
 	}	
 	return Right.Top();
+=======
+	try {
+		if (Size() == 0) {
+			throw logic_error();
+		}
+		if (Right.Empty()) {
+			Node* ptr = Left.head_;
+			while (ptr -> prev) {
+				ptr = ptr -> prev;
+			}
+			return ptr -> value_;
+		}	
+		return Right.Top();
+	} catch (exception& ex) {
+		std::cout << "size = 0, нельзя Front()\n";
+		throw;
+	}
+>>>>>>> cbc11e56520a96d754b4efc2e4e7a5925a9d8a3c
 }
 
 void Queue::Clear() {
