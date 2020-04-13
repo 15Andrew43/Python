@@ -2,58 +2,16 @@
 #include <cstring>
 #include <iomanip>
 
+#include "exception.h"
+
 void Delete(char** array, int n=3) {
 	for (int i = 0; i < n; ++i) {
 			delete[] array[i];
 		}
 	delete[] array;
 }
-/*
-bool split(char* type_str, char** ArrayOfStr, int n=3) {
-	int* seperate_ind = new int[n];
-	int k=-1;
-	int L = strlen(type_str);
-	type_str[L] = '.';
-	if (L > 10) {
-		delete[] seperate_ind;
-		return false;
-	}
-	for (int i = 0; type_str[i]; ++i) {
-		if (type_str[i] == '.' || type_str[i] == '/' || type_str[i] == '-') {
-			if (++k > 2) {
-				delete[] seperate_ind;
-				return false;
-			}
-			seperate_ind[k] = i;
-		}
-	}
 
-	int start = 0;
-	k = 0;
-	int end = seperate_ind[k];
-	for (int j = 0; j < n; ++j) {
-		for (int i = start; i < end; ++i) {
-			ArrayOfStr[j][i-start] = type_str[i];
-		}
-		start = end+1;
-		end = seperate_ind[++k];
-	}
-
-	delete[] seperate_ind;
-	return true;
-}
-*/
 int ToNumber(const char* str) {
-/*	
-	int number = 0;
-	int magnitude = 1;
-	int L = strlen(str);
-	for (int i = L-1; i >= 0; --i) {
-		number += ( magnitude * (int)(str[i]-'0') );
-		magnitude *= 10;
-	}
-	return number;
-*/
 	return atoi(str);
 }
 
@@ -73,17 +31,21 @@ bool ParseString(int* type_array, char* type_str, char sep='/') {
 	if (L > 10) {
 		Delete(ArrayOfStr);
 		delete[] seperate_ind;
-		return false;
+		throw InvalidArgument("Invalid Argument: too much symbols in the string!");
 	}
 	for (int i = 0; type_str[i]; ++i) {
 		if (type_str[i] == sep) {
 			if (++place > 2) {
 				Delete(ArrayOfStr);
 				delete[] seperate_ind;
-				return false;
+				throw InvalidArgument("Invalid Argument: seperate symbols are more than 2!");
 			}
 			seperate_ind[place] = i;
 		}
+	}
+
+	if (place == -1 || place == 0 || place == 1) {
+		throw InvalidArgument();
 	}
 
 //	fill the ArrayOfStr with Str(Str like "1234")

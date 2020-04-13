@@ -3,9 +3,9 @@
 
 
 class Time {
-	int hours_ = 1;
-	int minutes_ = 1;
-	int seconds_ = 1;
+	int hours_ = 0;
+	int minutes_ = 0;
+	int seconds_ = 0;
 
 public:
 	void SetHours(int hours);

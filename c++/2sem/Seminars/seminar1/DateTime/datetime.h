@@ -7,7 +7,6 @@
 struct DateTime {
 	Date date;
 	Time time;
-
 };
 
 void PrintDateTime(DateTime& datetime);

@@ -2,11 +2,14 @@
 
 #include "string.h"
 
+#include "exception.h"
+
 int main() {
 //	char* a = new char [10];
 //	std::cin >> a;
 //	String name=a;
 //	std::cout << name[2];
+	/*
 	std::cout << "------------------------\n";
 
 	String s1("Andrew");
@@ -37,20 +40,39 @@ int main() {
 
 	std::cout << "-------------------\n";
 	s4.Resize(30, 'a');	
+
 	std::cout << s4[10] << '\n';
 	std::cout << s4.Empty() << '\n';
 
 	std::cout << "------------------------\n";
 
+
 	String s6 = "qwertyuiop";
 //	String s7 = "mmmmmmmmmmaaaaammmmmaaaaa";
+
 	s6 += "mmmmmmmmmmaaaaammmmmaaaaa";
+
 	std::cout << s6[15] << '\n';
 	
 	String s7 = "puma";
 	s6+='t';
 	std::cout << s6[4] << '\n';
 
-	String s8;
-//	s8 = 
+
+	std::cout << "00000000000000000000000000000000000000000000000\n";
+*/
+	String z1;
+	std::cin >> z1;
+	try {
+		std::cout << z1.Back() << '\n';
+	} catch (Exception& ex) {
+		std::cout << ex.what() << '\n';
+	}
+	String z2 = "";
+	try {
+		z2.PopBack();
+		std::cout << z2;
+	} catch (Exception& ex) {
+		std::cout << ex.what() << '\n';
+	}
 }

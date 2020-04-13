@@ -2,7 +2,10 @@
 
 #include "queue.h"
 
+#include "exception.h"
+
 int main() {
+/*
 	Stack stack;
 	stack.Push(1543);
 	stack.Push(179);
@@ -22,9 +25,7 @@ int main() {
 	s1.Push(3);
 	s1.Push(12);
 	Stack s2;
-	std::cout << "hello\n";
 	s2 = s1;
-
 	std::cout << s2.Size() << '\n';
 	std::cout << s2.Top() << '\n';
 	s2.Pop();
@@ -32,7 +33,7 @@ int main() {
 	s2.Top() = 1534;
 	std::cout << s2.Top() << '\n';
 
-	std::cout << "============================================================\n";
+	std::cout << "=====================================================\n";
 
 	Queue q;
 	q.Push(1);
@@ -62,5 +63,32 @@ int main() {
 	std::cout << q.Front() << '\n';
 	q.Pop();
 	std::cout << q.Front() << '\n';
+	*/
+	Stack stack;
+	stack.Push(1543);
+	stack.Push(179);
+	stack.Push(57);
 
+	for (int i = 0; i < 4; ++i) {
+		try {
+			std::cout << stack.Top() << '\n';
+			stack.Pop();
+		} catch (Exception& ex) {
+			std::cout << ex.what() << '\n';
+		}
+	}
+	std::cout << "---------------------------------------------------\n";
+	Queue queue;
+	queue.Push(1);
+	queue.Push(2);
+	queue.Push(3);
+
+	for (int i = 0; i < 4; ++i) {
+		try {
+			std::cout << queue.Front() << '\n';
+			queue.Pop();
+		} catch (Exception& ex) {
+			std::cout << ex.what() << '\n';
+		}
+	}
 }

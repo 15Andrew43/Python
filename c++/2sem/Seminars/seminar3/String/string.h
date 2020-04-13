@@ -3,15 +3,17 @@
 
 #include <utility>
 
+
 class String {
 	char* buffer_;
-	size_t size_;
+	size_t size_ = 0;
 	size_t capacity_ = 1;
 
 	const static size_t kIncreaseFactor = 2;
 
 public:
 	String();
+	String(char symbol);
 	String(const char* str);
 	String(const char* str, size_t n);
 	String(size_t size, char symbol);
@@ -21,7 +23,7 @@ public:
 	~String();
 
 	size_t Size() const;
-	size_t Length() const; // ?????????????????????????????
+	size_t Length() const; 
 	size_t Capacity() const;
 	void Resize(size_t new_size, char fill);
 	bool Empty() const;
@@ -61,13 +63,20 @@ public:
 String operator+(const String& lhs, const String& rhs);
 String operator+(char symbol, const String& rhs);
 String operator+(const String& rhs, char symbol);
-//String operator+(char symbol_lhs, char symbol_rhs); ???????????????????????????????????????????????
+//String operator+(String symbol_lhs, String symbol_rhs); //????????????????????????????????????????????????????????????????????
 
 // < > >= <= == !=
+bool operator<(const String& lhs, const String& rhs);
+bool operator>(const String& lhs, const String& rhs);
+bool operator<=(const String& lhs, const String& rhs);
+bool operator>=(const String& lhs, const String& rhs);
+bool operator==(const String& lhs, const String& rhs);
+bool operator!=(const String& lhs, const String& rhs);
 
 // operator>>
 // operator<<
+std::istream& operator>>(std::istream& is, String& string);
+std::ostream& operator<<(std::ostream& os, String& string);
 
-void Copy(char* buffer_, const char* str);
 
 #endif

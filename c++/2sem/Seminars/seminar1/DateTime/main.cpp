@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include "datetime.h"
-
+#include "exception.h"
 
 int main() {
 /*	
@@ -82,7 +82,11 @@ int main() {
 
 //  
 	DateTime event;
-	ReadDateTime(event);
-	PrintDateTime(event);
+	try {
+		ReadDateTime(event);
+		PrintDateTime(event);
+	} catch (Exception& ex) {
+		std::cout << ex.what();
+	}
 
 }

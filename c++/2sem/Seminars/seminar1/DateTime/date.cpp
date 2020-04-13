@@ -4,6 +4,7 @@
 
 #include "date.h"
 #include "lib.h"
+#include "exception.h"
 
 bool Date::IsLeapYear() const {
 	if ((year_%4 == 0 && year_%100 != 0) || (year_%400 == 0)){
@@ -19,6 +20,8 @@ void Date::SetDay(int day) {
 	capacity[1] = ((IsLeapYear()) ? 29 : 28);
 	if (day > 0 && day <= 31 && day <= capacity[month_-1]) {
 		day_ = day;
+	} else {
+		throw DomainError("Domain Error: error in the setting of the day.");
 	}
 }
 
@@ -27,16 +30,17 @@ void Date::SetMonth(int month) {
 	capacity[1] = (IsLeapYear()?29:28);
 	if (month > 0 && month <= 12 && day_ < capacity[month-1]) {
 		month_ = month;
+	} else {
+		throw DomainError("Domain Error: error in the setting of the month.");
 	}
 }
 
 
 void Date::SetYear(int year) {
-	year_ = year;
 	if (!(IsLeapYear()) && day_ == 29 && month_ == 2) { 
-		day_ = 1;
-		month_ = 1;
+		throw DomainError("Domain Error: error in the setting of the year.");
 	}
+	year_ = year;
 }
 
 int Date::GetDay() const {
@@ -51,7 +55,12 @@ int Date::GetYear() const {
 
 
 void PrintDate(const Date& date) {
-	std::cout << std::setfill('0') << std::setw(2) << date.GetDay() << '.' << std::setw(2) << date.GetMonth() << '.' << date.GetYear();
+	std::cout << std::setfill('0') << std::setw(2) << date.GetDay() 
+							<< '.' << std::setw(2) << date.GetMonth() 
+							<< '.' << date.GetYear();
+	if (date.GetDay() == 0 && date.GetMonth() == 0 && date.GetYear() == 0) {
+		throw Exception("Exception: perhaps the date is not set.");
+	}
 }
 
 Date ReadDate(Date& date) {
@@ -66,6 +75,5 @@ Date ReadDate(Date& date) {
 		date.SetMonth(date_array[1]);
 		date.SetYear(date_array[2]);
 	}
-
 	return date;
 }
