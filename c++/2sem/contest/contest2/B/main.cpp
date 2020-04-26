@@ -62,9 +62,6 @@ public:
     long double VectorProduct(const Vector& other) {
         return x_ * other.y_ - other.x_ * y_;
     }
-    friend std::istream& operator>>(std::istream& is, Vector& v);
-    friend std::ostream& operator<<(std::ostream& os, const Vector& v);
-
 };
 std::istream& operator>>(std::istream& is, Vector& v) {
     long double x, y;
@@ -87,6 +84,6 @@ int main() {
               << a.getLength() << ' ' << b.getLength() << '\n'
               << a + b << '\n'
               << a.ScalarProduct(b) << ' ' << a.VectorProduct(b) << '\n'
-              << abs(a.VectorProduct(b))/2;
+              << fabs(a.VectorProduct(b))/2;
     return 0;
 }
