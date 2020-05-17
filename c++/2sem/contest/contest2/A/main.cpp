@@ -5,6 +5,41 @@
 #include <vector>
 
 namespace geometry {
+
+    class Exception {
+        std::string message_eror_ = "exception!!!";
+    public:
+        Exception() = default;
+        Exception(const std::string& string) : message_eror_(string) {
+        }
+        virtual std::string what() const {
+            return message_eror_;
+        }
+    };
+    class NoIntersection : public Exception {
+        std::string message_eror_ = "No Intersection";
+    public:
+        NoIntersection() = default;
+        NoIntersection(const std::string& string) : message_eror_(string) {
+        }
+        virtual std::string what() const override {
+            return message_eror_;
+        }
+    };
+    class SegmentInLine : public Exception {
+        std::string message_eror_ = "is parallel";
+    public:
+        SegmentInLine() = default;
+        SegmentInLine(const std::string& string) : message_eror_(string) {
+        }
+        virtual std::string what() const override {
+            return message_eror_;
+        }
+    };
+
+
+
+
     class Vector;
 
     class AbstractShape;
@@ -13,13 +48,16 @@ namespace geometry {
     class Ray;
     class Line;
     class Polygon;
-
+    class Circle;
 
 
 
     class AbstractShape {
     public:
-        // define pure virtual methods
+        virtual bool ContainsPoint(Point) const = 0;
+        virtual void Move() = 0;
+        virtual bool CrossSegment() const = 0;
+        virtual AbstractShape* Clone() const;
     };
 
 
@@ -401,7 +439,7 @@ namespace geometry {
         }
 
 
-        bool IsInside(const Point& point) const {
+        bool ContainsPoint(const Point& point) const {
             Ray ray(point, Vector(rand() % 1000 +1, rand() % 1000 + 1));
             int point_cnt = Points_.size();
             int count_intersection = 0;
@@ -419,6 +457,18 @@ namespace geometry {
             return ((count_intersection % 2 == 1) ? true : false);
         }
 
+        long double getSquare() const {
+            long double square = 0;
+            const Point point(11000, 11000);
+            int point_cnt = Points_.size();
+            for (int i = 0; i < point_cnt; ++i) {
+                Vector v1(point, Points_[i]);
+                Vector v2(point, Points_[(i+1) % point_cnt]);
+                square += (v1.VectorProduct(v2) / 2);
+            }
+            square = fabs(square);
+            return square;
+        }
     };
     std::ostream& operator<<(std::ostream& os, const Polygon& polygon) {
         for (int i = 0; i < polygon.getPoints().size(); ++i) {
@@ -428,35 +478,13 @@ namespace geometry {
     }
 
 
-    class Exception {
-        std::string message_eror_ = "exception!!!";
+
+
+    class Circle : public  AbstractShape {
+        Point point_;
+        long double r_;
     public:
-        Exception() = default;
-        Exception(const std::string& string) : message_eror_(string) {
-        }
-        virtual std::string what() const {
-            return message_eror_;
-        }
-    };
-    class NoIntersection : public Exception {
-        std::string message_eror_ = "No Intersection";
-    public:
-        NoIntersection() = default;
-        NoIntersection(const std::string& string) : message_eror_(string) {
-        }
-        virtual std::string what() const override {
-            return message_eror_;
-        }
-    };
-    class SegmentInLine : public Exception {
-        std::string message_eror_ = "is parallel";
-    public:
-        SegmentInLine() = default;
-        SegmentInLine(const std::string& string) : message_eror_(string) {
-        }
-        virtual std::string what() const override {
-            return message_eror_;
-        }
+
     };
 
 

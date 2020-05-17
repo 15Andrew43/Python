@@ -1,33 +1,43 @@
-import numpy as np
+import sys
 
-nice = False
-person = 'nice' if nice else 'bad'
 
-print(person)
+class ExtendedList(list):
 
-NameList = ['a', 'b', 'c']
+    @property
+    def reversed(self):
+        return self[::-1]
+    R = reversed
 
-for i, name in enumerate(NameList):
-	print(i, name)
-	if i==2:
-		break
-else:
-	print(1543)
+    @property
+    def first(self):
+        return self[0]
 
-for i in np.arange(1, 10, 0.5):
-	print(i)
+    @first.setter
+    def first(self, value):
+        self[0] = value
+    F = first
 
-# [x**2 for x in range(10) if x%2==0 print(x**2)]
+    @property
+    def last(self):
+        return self[-1]
 
-a = [2, 5, 1, 0, 6, 4, 9, 10]
+    @last.setter
+    def last(self, value):
+        self[-1] = value
+    L = last
 
-def f():
-	a = 1
-	b = 1
-	while True:
-		a, b = b, a+b
-		yield b
+    @property
+    def size(self):
+        return len(self)
 
-for x in f():
-	print(x)
-	if x>100000: break
+    @size.setter
+    def size(self, value):
+        if value > self.size:
+            for i in range(value - self.size):
+                self.append(None)
+        else:
+            for i in range(self.size - value):
+                self.pop()
+    S = size
+
+exec(sys.stdin.read())

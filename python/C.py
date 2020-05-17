@@ -1,13 +1,22 @@
-n = int(input())
+import sys
+import traceback
 
-for i in range(n):
-    if (i+1)%15 == 0:
-        print("Fizz Buzz", end = "")
-    elif (i+1)%3 == 0:
-        print("Fizz", end = "")
-    elif (i+1)%5 == 0:
-        print("Buzz", end = "")
-    else:
-        print (i+1, end = "")
-    if i!= n-1:
-    	print(", ", end = "")
+
+def force_load(name):
+	filename = name + '.py'
+	file = open(filename, "r")
+	lines = file.readlines()
+	ldict = {}
+	for i in range(len(lines)):
+		try:
+			exec(''.join(lines), globals(), ldict)
+		except Exception:
+			cl, exc, tb = sys.exc_info()
+			line_number = traceback.extract_tb(tb)[-1][1]
+			lines.pop(line_number - 1)
+		except SyntaxError as se:
+			lines.pop(se.lineno - 1)
+	file.close()
+	result = {}
+	exec(''.join(lines), globals(), result)
+	return result

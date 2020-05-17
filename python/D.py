@@ -1,19 +1,29 @@
-n = int(input())
-
-up = down = n
+from contextlib import contextmanager
 
 
-while True:
-    sum11 = up//100000 + up//10000%10 + up//1000%10    
-    sum12 = up//100%10 + up//10%10 + up%10
-    sum21 = down//100000 + down//10000%10 + down//1000%10    
-    sum22 = down//100%10 + down//10%10 + down%10
-    if sum11 == sum12:
-        print(up)
-        break
-    elif sum21 == sum22:
-        print(down)
-        break
-    up+=1
-    down-=1
-    
+@contextmanager
+def supresser(*args):
+    try:
+        yield
+    except args:
+        pass
+
+@contextmanager
+def retyper(type_from, type_to):
+    try:
+        yield
+    except type_from as ex:
+        exception = type_to()
+        # exception.args = ex.args
+        raise exception
+
+
+class dumper:
+    def __init__(self, stream):
+        self.stream = stream
+
+    # def __enter__(self):
+    #     pass
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.stream.write(str(exc_val))
