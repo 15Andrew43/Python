@@ -9,6 +9,9 @@ private:
 public:
     explicit Graph(int N) {
         graph_.reserve(N);
+        for (int i = 0; i < N; ++i) {
+            graph_[i] = std::vector<int>();
+        }
     }
     void NewEdge(int a, int b) {
         graph_[a].push_back(b);

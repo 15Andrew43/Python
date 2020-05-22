@@ -9,34 +9,34 @@ private:
     size_t max_sieze_;
     std::unordered_map<size_t, std::list<size_t>::iterator> cash_;
 public:
-    void SetSizeCash(size_t size) {
+    Server(size_t size) {
         max_sieze_ = size;
         cash_.reserve(max_sieze_);
     }
-    void getUser(size_t user) {
+    int GetUser(size_t user) {
         if (cash_.size() < max_sieze_) {
             if (cash_.count(user) == 0) {
                 users_.push_back(user);
-                cash_[user] = --users_.end();
-                std::cout << 1 << ' ';
+                cash_[user] = std::prev(users_.end());
+                return 1;
             } else {
                     users_.erase(cash_[user]);
                     users_.push_back(user);
-                    cash_[user] = --users_.end();
-                std::cout << 0 << ' ';
+                    cash_[user] = std::prev(users_.end());
+                return 0;
             }
         } else if (cash_.size() == max_sieze_) {
             if (cash_.count(user) == 0) {
                 cash_.erase(users_.front());
                 users_.pop_front();
                 users_.push_back(user);
-                cash_[user] = --users_.end();
-                std::cout << 1 << ' ';
+                cash_[user] = std::prev(users_.end());
+                return 1;
             } else {
                     users_.erase(cash_[user]);
                     users_.push_back(user);
-                    cash_[user] = --users_.end();
-                std::cout << 0 << ' ';
+                    cash_[user] = std::prev(users_.end());
+                return 0;
             }
         }
     }
@@ -44,13 +44,12 @@ public:
 
 
 int main() {
-    Server server;
     size_t M;
     std::cin >> M;
-    server.SetSizeCash(M);
+    Server server(M);
     size_t user;
     while (std::cin >> user) {
-        server.getUser(user);
+        std::cout << server.GetUser(user) << ' ';
     }
     return 0;
 }

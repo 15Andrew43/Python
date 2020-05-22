@@ -9,28 +9,28 @@ int main() {
     const size_t kModule = 1000000000;
     size_t n;
     std::cin >> n;
-    std::set<size_t> s;
-    char operation;
-    size_t i;
+    std::set<size_t> Set;
     size_t res;
-    bool flag = false;
+    bool after_question = false;
     for (size_t j = 0; j < n; ++j) {
-        std::cin >> operation >> i;
-        if (flag && operation == '+') {
-            s.insert((i + res) % kModule);
-            flag = false;
+        char operation;
+        size_t elem;
+        std::cin >> operation >> elem;
+        if (after_question && operation == '+') {
+            Set.insert((elem + res) % kModule);
+            after_question = false;
         } else if (operation == '+') {
-            s.insert(i);
+            Set.insert(elem);
         } else {
-            std::set<size_t >::iterator it = s.lower_bound(i);
-            if (it != s.end()) {
+            auto it = Set.lower_bound(elem);
+            if (it != Set.end()) {
                 res = *it;
                 std::cout << res << '\n';
             } else {
                 res = 0;
                 std::cout << -1 << '\n';
             }
-            flag = true;
+            after_question = true;
         }
     }
     return 0;
