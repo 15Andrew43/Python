@@ -1,11 +1,10 @@
 #include <iostream>
-#include <unordered_map>
 #include <vector>
 
 
 class Graph {
 private:
-    std::unordered_map<int, std::vector<int>> graph_;
+    std::vector<std::vector<int>> graph_;
 public:
     explicit Graph(int N) {
         graph_.reserve(N);
@@ -14,11 +13,11 @@ public:
         }
     }
     void NewEdge(int a, int b) {
-        graph_[a].push_back(b);
-        graph_[b].push_back(a);
+        graph_[a-1].push_back(b-1);
+        graph_[b-1].push_back(a-1);
     }
     const std::vector<int> getAdjacentVertexes(int a) {
-        return graph_[a];
+        return graph_[a-1];
     }
 };
 
@@ -42,7 +41,7 @@ int main() {
                 int c;
                 std::cin >> c;
                 for (int v : graph.getAdjacentVertexes(c)) {
-                    std::cout << v << ' ';
+                    std::cout << v + 1 << ' ';
                 }
                 std::cout << '\n';
                 break;

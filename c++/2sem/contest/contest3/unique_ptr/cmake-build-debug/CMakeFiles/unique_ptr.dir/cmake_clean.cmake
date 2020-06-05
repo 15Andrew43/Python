@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/unique_ptr.dir/main.cpp.o"
-  "unique_ptr.pdb"
-  "unique_ptr"
+  "../bin/unique_ptr.pdb"
+  "../bin/unique_ptr"
 )
 
 # Per-language clean rules from dependency scanning.

@@ -26,7 +26,7 @@ public:
         if (this == &other) {
             return *this;
         }
-        delete ptr_;
+//        delete ptr_;
         ptr_ = other.ptr_;
         other.ptr_ = nullptr;
         return *this;
@@ -42,7 +42,7 @@ public:
     void Swap(UniquePtr<T>& other) {
         T* tmp = std::move(ptr_);
         ptr_ = std::move(other.ptr_);
-        other.ptr_ = tmp;
+        other.ptr_ = std::move(tmp);
     }
     T* Get() const {
         return ptr_;
@@ -53,7 +53,7 @@ public:
     T* operator->() const {
         return ptr_;
     }
-    operator bool() {
+    operator bool() const {
         if (ptr_) {
             return true;
         }
